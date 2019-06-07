@@ -20,11 +20,13 @@ The Mycroft GUI Visual Skill Development Guide is divided into two sections:
 
 ##### Visual Skill Development API Foundation
 
-- Learn and familarize yourself with the basics of expanding your voice only skills with the Visual Skill Development API for devices that support displays..(Learn More Link)
+-   Learn and familarize yourself with the basics of expanding your voice only skills with the Visual Skill Development API for devices that support displays..(Learn More Link)
+    
 
 ##### Visual Skill Development Human Interface Guidelines
 
-- Learn about the best practises and design philosphy to creating consistent visual experiences..(Learn More Link)
+-   Learn about the best practises and design philosphy to creating consistent visual experiences..(Learn More Link)
+    
 
 ## VISUAL SKILL DEVELOPMENT API FOUNDATION
 
@@ -32,9 +34,10 @@ Mycroft enabled devices with displays such as the Mark II, KDE Plasmoid provide 
 
 This section of the guide is divided into two skill examples that will show you how to create:
 
-- In-depth QML based audio and visual interaction skills
-
-- Simple template based text and image skills
+-   In-depth QML based audio and visual interaction skills
+    
+-   Simple template based text and image skills
+    
 
 #### In-depth QML based audio and visual interaction skills
 
@@ -44,9 +47,10 @@ QML user interface markup language is a declartive language built on top of Qt's
 
 A collection of resources to familarize you with QML and Kirigami Framework.
 
-- [Introduction to QML ](http://doc.qt.io/qt-5/qml-tutorial.html)
-
-- [Introduction to Kirigami](https://www.kde.org/products/kirigami/)
+-   [Introduction to QML ](http://doc.qt.io/qt-5/qml-tutorial.html)
+    
+-   [Introduction to Kirigami](https://www.kde.org/products/kirigami/)
+    
 
 ##### Building your skill to support display
 
@@ -56,15 +60,16 @@ Skills for Mycroft AI are written in Python, using the skills development guide 
 
 Let's walk you through some basics of writing your QML user interface, this section is divided into 5 parts:
 
-- [Importing Modules](#Importing-Modules)
-
-- [Using Mycroft-GUI Framework Base Delegates](#Using-Mycroft-GUI-Framework)
-
-- [Using Mycroft Framework Components](#Using-Mycroft-Framework-Components)
-
-- Handling Data Models
-
-- [Event Handling](#Event-Handling)
+-   [Importing Modules](#Importing-Modules)
+    
+-   [Using Mycroft-GUI Framework Base Delegates](#Using-Mycroft-GUI-Framework)
+    
+-   [Using Mycroft Framework Components](#Using-Mycroft-Framework-Components)
+    
+-   Handling Data Models
+    
+-   [Event Handling](#Event-Handling)
+    
 
 ##### Importing Modules
 
@@ -109,93 +114,94 @@ This provides a QML `Item` to render Adobe® After Effects™ animations exporte
 
 When you design your skill with QML, Mycroft-GUI frameworks provides you with some base delegates you should use when desiging your GUI skill. The base delegates provide you with a basic presentation layer for your skill with some property assignments that can help you setup background images, background dim, timeout and grace time properties to give you the control you need for rendereing an experience. In your GUI Skill you can use:
 
-- Mycroft.Delegate: *Needs Description*
-
-  Simple display Image and Text Example using Mycroft.Delegate
-
-  ```
-  import Mycroft 1.0 as Mycroft
-  
-  Mycroft.Delegate {
-      skillBackgroundSource: sessionData.exampleImage
-      ColumnLayout {
-          anchors.fill: parent
-          Image {
-              id: imageId
-              Layout.fillWidth: true
-              Layout.preferredHeight: Kirigami.Units.gridUnit * 2
-              source: "https://source.unsplash.com/1920x1080/?+autumn"
-           }
-           Label {
-              id: labelId
-              Layout.fillWidth: true
-              Layout.preferredHeight: Kirigami.Units.gridUnit * 4
-              text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."            
-          }
-      }
-  }
-  ```
-
-- Mycroft.ScrollableDelegate: *Needs Description*
-
-  Example of using Mycroft.ScrollableDelegate
-
-  ```
-  import QtQuick 2.4
-  import QtQuick.Controls 2.2
-  import QtQuick.Layouts 1.4
-  import org.kde.kirigami 2.4 as Kirigami
-  import Mycroft 1.0 as Mycroft
-  
-  Mycroft.ScrollableDelegate{
-      id: root
-      skillBackgroundSource: sessionData.background
-      property var sampleModel: sessionData.sampleBlob
-  
-      Kirigami.CardsListView {
-          id: exampleListView
-          Layout.fillWidth: true
-          Layout.fillHeight: true
-          model: sampleModel.lorem
-          delegate: Kirigami.AbstractCard {
-              id: rootCard
-              implicitHeight: delegateItem.implicitHeight + Kirigami.Units.largeSpacing
-              contentItem: Item {
-                  implicitWidth: parent.implicitWidth
-                  implicitHeight: parent.implicitHeight
-                  ColumnLayout {
-                      id: delegateItem
-                      anchors.left: parent.left
-                      anchors.right: parent.right
-                      anchors.top: parent.top
-                      spacing: Kirigami.Units.largeSpacing
-                      Kirigami.Heading {
-                          id: restaurantNameLabel
-                          Layout.fillWidth: true
-                          text: modelData.text
-                          level: 2
-                          wrapMode: Text.WordWrap
-                      }
-                      Kirigami.Separator {
-                          Layout.fillWidth: true
-                      }
-                      Image {
-                          id: placeImage
-                          source: modelData.image
-                          Layout.fillWidth: true
-                          Layout.preferredHeight: Kirigami.Units.gridUnit * 3
-                          fillMode: Image.PreserveAspectCrop
-                      }
-                      Item {
-                          Layout.fillWidth: true
-                          Layout.preferredHeight: Kirigami.Units.gridUnit * 1
-                      }
-                  }
-              }
-          }
-      }
-  }
-  ```
+-   Mycroft.Delegate: *Needs Description*
+    
+    Simple display Image and Text Example using Mycroft.Delegate
+    
+    ```
+    import Mycroft 1.0 as Mycroft
+    
+    Mycroft.Delegate {
+        skillBackgroundSource: sessionData.exampleImage
+        ColumnLayout {
+            anchors.fill: parent
+            Image {
+                id: imageId
+                Layout.fillWidth: true
+                Layout.preferredHeight: Kirigami.Units.gridUnit * 2
+                source: "https://source.unsplash.com/1920x1080/?+autumn"
+             }
+             Label {
+                id: labelId
+                Layout.fillWidth: true
+                Layout.preferredHeight: Kirigami.Units.gridUnit * 4
+                text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."            
+            }
+        }
+    }
+    ```
+    
+-   Mycroft.ScrollableDelegate: *Needs Description*
+    
+    Example of using Mycroft.ScrollableDelegate
+    
+    ```
+    import QtQuick 2.4
+    import QtQuick.Controls 2.2
+    import QtQuick.Layouts 1.4
+    import org.kde.kirigami 2.4 as Kirigami
+    import Mycroft 1.0 as Mycroft
+    
+    Mycroft.ScrollableDelegate{
+        id: root
+        skillBackgroundSource: sessionData.background
+        property var sampleModel: sessionData.sampleBlob
+    
+        Kirigami.CardsListView {
+            id: exampleListView
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            model: sampleModel.lorem
+            delegate: Kirigami.AbstractCard {
+                id: rootCard
+                implicitHeight: delegateItem.implicitHeight + Kirigami.Units.largeSpacing
+                contentItem: Item {
+                    implicitWidth: parent.implicitWidth
+                    implicitHeight: parent.implicitHeight
+                    ColumnLayout {
+                        id: delegateItem
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.top: parent.top
+                        spacing: Kirigami.Units.largeSpacing
+                        Kirigami.Heading {
+                            id: restaurantNameLabel
+                            Layout.fillWidth: true
+                            text: modelData.text
+                            level: 2
+                            wrapMode: Text.WordWrap
+                        }
+                        Kirigami.Separator {
+                            Layout.fillWidth: true
+                        }
+                        Image {
+                            id: placeImage
+                            source: modelData.image
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: Kirigami.Units.gridUnit * 3
+                            fillMode: Image.PreserveAspectCrop
+                        }
+                        Item {
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: Kirigami.Units.gridUnit * 1
+                        }
+                    }
+                }
+            }
+        }
+    }
+    ```
+    
 
 ##### Using Mycroft Framework Components
 
@@ -239,29 +245,29 @@ self.gui.show_url("https://mycroft.ai")
 ...
 def handle_hello_world(self, message):
 ...
-rawhtmlexample = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Untitled Document</title>
-<body>
-<h1> HTML Example </h1>
-<p> This is an example of an HTML webpage. </p>
-<p> <b>Tags</b> can be wrapped <i>inside other tags!</i> </p>
+rawhtmlexample = """
 
-<p>
-	HTML doesn't care about extra spaces, tabs or newlines,
-	so we can use indentation and spacing to keep everything
-	lined up nicely.
-</p>
 
-<ul>
-	<li> This is how you create a bulleted list! </li>
-	<li> Item 2 </li>
-	<li> Item 3 </li>
-</ul>
-</body>
-</html>
+
+Untitled Document
+
+ HTML Example 
+ This is an example of an HTML webpage. 
+ Tags can be wrapped inside other tags! 
+
+
+    HTML doesn't care about extra spaces, tabs or newlines,
+    so we can use indentation and spacing to keep everything
+    lined up nicely.
+
+
+
+     This is how you create a bulleted list! 
+     Item 2 
+     Item 3 
+
+
+
 """ 
 self.gui.show_html(rawhtmlexample)
 ...
@@ -546,6 +552,39 @@ Mycroft.Delegate {
         nextAction: "author.example-player.next" //Event to drive next button action in skill
         previousAction: "author.example-player.previous" //Event to drive previous button action in skill
         status: sessionData.status             //Current status of playing audio
+    }
+}
+```
+
+##### Using VideoPlayer Component To Play Video Files / Video Streaming
+
+VideoPlayer component is a custom wrapper around Qt Multimedia Video, that gives the Skill Authors a basic video player that they can plug into their skills.
+
+**QML Example**
+
+```
+import QtQuick.Layouts 1.4
+import QtQuick 2.9
+import QtQuick.Controls 2.0 as Controls
+import org.kde.kirigami 2.4 as Kirigami
+
+import Mycroft 1.0 as Mycroft
+
+Mycroft.Delegate {
+    id: root
+    fillWidth: true
+    background: Rectangle {
+        color: "black"
+    }
+    
+    Mycroft.VideoPlayer {
+        id: examplePlayer
+        anchors.fill: parent
+        source: sessionData.video    // Set URL of video file
+        hasNextAction: true          // Set to true for nextButton
+        nextAction: "author.example-player.next"  //Event to drive next button action in skill
+        hasPreviousAction: false     // Set to false to hide previousButton
+        status: sessionData.status   // Current status of playing video
     }
 }
 ```
