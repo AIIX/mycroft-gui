@@ -44,8 +44,10 @@ Mycroft.AbstractSkillView {
 
     onOpenChanged: {
         if (open) {
+            closeAnimation.running = false;
             openAnimation.restart();
         } else {
+            openAnimation.running = false;
             closeAnimation.restart();
         }
     }
@@ -173,6 +175,13 @@ Mycroft.AbstractSkillView {
 
                     onCurrentIndexChanged: {
                         delegates.currentIndex = currentIndex
+                    }
+
+                    Keys.onLeftPressed: {
+                        delegatesView.currentIndex--
+                    }
+                    Keys.onRightPressed: {
+                        delegatesView.currentIndex++
                     }
 
                     Connections {
