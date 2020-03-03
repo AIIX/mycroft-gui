@@ -41,8 +41,11 @@ class MycroftController : public QObject
     //FIXME: make those two enums?
     Q_PROPERTY(bool speaking READ isSpeaking NOTIFY isSpeakingChanged)
     Q_PROPERTY(bool listening READ isListening NOTIFY isListeningChanged)
-    //FIXME: to remove?
+
     Q_PROPERTY(QString currentSkill READ currentSkill NOTIFY currentSkillChanged)
+    Q_PROPERTY(QString currentIntent READ currentIntent NOTIFY currentIntentChanged)
+
+    Q_PROPERTY(bool serverReady READ serverReady NOTIFY serverReadyChanged)
 
     Q_ENUMS(Status)
 public:
@@ -57,8 +60,10 @@ public:
 
     bool isSpeaking() const;
     bool isListening() const;
+    bool serverReady() const;
     Status status() const;
     QString currentSkill() const;
+    QString currentIntent() const;
 
     //Public API NOT to be used with QML
     void registerView(AbstractSkillView *view);
@@ -74,6 +79,8 @@ Q_SIGNALS:
     void stopped();
     void notUnderstood();
     void currentSkillChanged();
+    void currentIntentChanged();
+    void serverReadyChanged();
 
     //signal with nearly all data
     //TODO: remove?
@@ -82,6 +89,8 @@ Q_SIGNALS:
     //type utterances, type is the current skill
     //TODO: remove?
     void fallbackTextRecieved(const QString &skill, const QVariantMap &data);
+
+    void utteranceManagedBySkill(const QString &skill);
 
 public Q_SLOTS:
     void start();
@@ -99,10 +108,12 @@ private:
 
     QTimer m_reconnectTimer;
     QTimer m_reannounceGuiTimer;
+
     GlobalSettings *m_appSettingObj;
 
     //TODO: remove
     QString m_currentSkill;
+    QString m_currentIntent;
 
     QHash<QString, AbstractSkillView *> m_views;
 
@@ -115,5 +126,6 @@ private:
     bool m_isSpeaking = false;
     bool m_isListening = false;
     bool m_mycroftLaunched = false;
+    bool m_serverReady = false;
 };
 

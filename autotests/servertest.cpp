@@ -104,12 +104,12 @@ AbstractDelegate *ServerTest::delegateForSkill(const QString &skill, const QUrl 
         return nullptr;
     }
 
-    AbstractDelegate *delegate = nullptr;
     for (auto d : delegatesModel->delegates()) {
         if (d->qmlUrl() == url) {
             return d;
         }
     }
+    return nullptr;
 }
 
 QList <AbstractDelegate *>ServerTest::delegatesForSkill(const QString &skill)
@@ -210,7 +210,7 @@ void ServerTest::testActiveSkills()
     skillInsertedSpy.wait();
 
     QCOMPARE(m_view->activeSkills()->rowCount(), 1);
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(0,0)), QStringLiteral("mycroft.weather"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(0,0), ActiveSkillsModel::SkillId), QStringLiteral("mycroft.weather"));
 
     //Add food-wizard skill, before weather
     m_guiWebSocket->sendTextMessage(QStringLiteral("{\"type\": \"mycroft.session.list.insert\", \"namespace\": \"mycroft.system.active_skills\", \"position\": 0, \"data\": [{\"skill_id\": \"aiix.food-wizard\"}]}"));
@@ -218,8 +218,8 @@ void ServerTest::testActiveSkills()
     skillInsertedSpy.wait();
 
     QCOMPARE(m_view->activeSkills()->rowCount(), 2);
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(0,0)), QStringLiteral("aiix.food-wizard"));
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(1,0)), QStringLiteral("mycroft.weather"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(0,0), ActiveSkillsModel::SkillId), QStringLiteral("aiix.food-wizard"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(1,0), ActiveSkillsModel::SkillId), QStringLiteral("mycroft.weather"));
 
     //Add timer skill, between food-wizard and weather
     m_guiWebSocket->sendTextMessage(QStringLiteral("{\"type\": \"mycroft.session.list.insert\", \"namespace\": \"mycroft.system.active_skills\", \"position\": 1, \"data\": [{\"skill_id\": \"mycroft.timer\"}]}"));
@@ -227,9 +227,9 @@ void ServerTest::testActiveSkills()
     skillInsertedSpy.wait();
 
     QCOMPARE(m_view->activeSkills()->rowCount(), 3);
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(0,0)), QStringLiteral("aiix.food-wizard"));
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(1,0)), QStringLiteral("mycroft.timer"));
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(2,0)), QStringLiteral("mycroft.weather"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(0,0), ActiveSkillsModel::SkillId), QStringLiteral("aiix.food-wizard"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(1,0), ActiveSkillsModel::SkillId), QStringLiteral("mycroft.timer"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(2,0), ActiveSkillsModel::SkillId), QStringLiteral("mycroft.weather"));
 
     //Add shopping skill, wiki and weather in the end: weather will be ignored as is already present
     m_guiWebSocket->sendTextMessage(QStringLiteral("{\"type\": \"mycroft.session.list.insert\", \"namespace\": \"mycroft.system.active_skills\", \"position\": 3, \"data\": [{\"skill_id\": \"aiix.shopping-demo\"}, {\"skill_id\": \"mycroft.wiki\"}, {\"skill_id\": \"mycroft.weather\"}]}"));
@@ -238,11 +238,11 @@ void ServerTest::testActiveSkills()
 
     //5 because weather was ignored
     QCOMPARE(m_view->activeSkills()->rowCount(), 5);
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(0,0)), QStringLiteral("aiix.food-wizard"));
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(1,0)), QStringLiteral("mycroft.timer"));
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(2,0)), QStringLiteral("mycroft.weather"));
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(3,0)), QStringLiteral("aiix.shopping-demo"));
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(4,0)), QStringLiteral("mycroft.wiki"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(0,0), ActiveSkillsModel::SkillId), QStringLiteral("aiix.food-wizard"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(1,0), ActiveSkillsModel::SkillId), QStringLiteral("mycroft.timer"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(2,0), ActiveSkillsModel::SkillId), QStringLiteral("mycroft.weather"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(3,0), ActiveSkillsModel::SkillId), QStringLiteral("aiix.shopping-demo"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(4,0), ActiveSkillsModel::SkillId), QStringLiteral("mycroft.wiki"));
 
     //Move timer in first position
     m_guiWebSocket->sendTextMessage(QStringLiteral("{\"type\": \"mycroft.session.list.move\", \"namespace\": \"mycroft.system.active_skills\", \"from\": 2, \"to\": 1, \"items_number\": 1}"));
@@ -250,11 +250,11 @@ void ServerTest::testActiveSkills()
     skillMovedSpy.wait();
 
     QCOMPARE(m_view->activeSkills()->rowCount(), 5);
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(0,0)), QStringLiteral("aiix.food-wizard"));
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(1,0)), QStringLiteral("mycroft.weather"));
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(2,0)), QStringLiteral("mycroft.timer"));
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(3,0)), QStringLiteral("aiix.shopping-demo"));
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(4,0)), QStringLiteral("mycroft.wiki"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(0,0), ActiveSkillsModel::SkillId), QStringLiteral("aiix.food-wizard"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(1,0), ActiveSkillsModel::SkillId), QStringLiteral("mycroft.weather"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(2,0), ActiveSkillsModel::SkillId), QStringLiteral("mycroft.timer"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(3,0), ActiveSkillsModel::SkillId), QStringLiteral("aiix.shopping-demo"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(4,0), ActiveSkillsModel::SkillId), QStringLiteral("mycroft.wiki"));
 
     //Move weather and food-wizard in front
     m_guiWebSocket->sendTextMessage(QStringLiteral("{\"type\": \"mycroft.session.list.move\", \"namespace\": \"mycroft.system.active_skills\", \"from\": 1, \"to\": 0, \"items_number\": 2}"));
@@ -262,11 +262,11 @@ void ServerTest::testActiveSkills()
     skillMovedSpy.wait();
 
     QCOMPARE(m_view->activeSkills()->rowCount(), 5);
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(0,0)), QStringLiteral("mycroft.weather"));
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(1,0)), QStringLiteral("mycroft.timer"));
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(2,0)), QStringLiteral("aiix.food-wizard"));
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(3,0)), QStringLiteral("aiix.shopping-demo"));
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(4,0)), QStringLiteral("mycroft.wiki"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(0,0), ActiveSkillsModel::SkillId), QStringLiteral("mycroft.weather"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(1,0), ActiveSkillsModel::SkillId), QStringLiteral("mycroft.timer"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(2,0), ActiveSkillsModel::SkillId), QStringLiteral("aiix.food-wizard"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(3,0), ActiveSkillsModel::SkillId), QStringLiteral("aiix.shopping-demo"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(4,0), ActiveSkillsModel::SkillId), QStringLiteral("mycroft.wiki"));
 
     //Move timer and food-wizard in the back
     m_guiWebSocket->sendTextMessage(QStringLiteral("{\"type\": \"mycroft.session.list.move\", \"namespace\": \"mycroft.system.active_skills\", \"from\": 1, \"to\": 4, \"items_number\": 2}"));
@@ -274,11 +274,11 @@ void ServerTest::testActiveSkills()
     skillMovedSpy.wait();
 
     QCOMPARE(m_view->activeSkills()->rowCount(), 5);
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(0,0)), QStringLiteral("mycroft.weather"));
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(1,0)), QStringLiteral("aiix.shopping-demo"));
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(2,0)), QStringLiteral("mycroft.timer"));
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(3,0)), QStringLiteral("aiix.food-wizard"));
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(4,0)), QStringLiteral("mycroft.wiki"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(0,0), ActiveSkillsModel::SkillId), QStringLiteral("mycroft.weather"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(1,0), ActiveSkillsModel::SkillId), QStringLiteral("aiix.shopping-demo"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(2,0), ActiveSkillsModel::SkillId), QStringLiteral("mycroft.timer"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(3,0), ActiveSkillsModel::SkillId), QStringLiteral("aiix.food-wizard"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(4,0), ActiveSkillsModel::SkillId), QStringLiteral("mycroft.wiki"));
 
     //Remove shopping-demo and timer
     m_guiWebSocket->sendTextMessage(QStringLiteral("{\"type\": \"mycroft.session.list.remove\", \"namespace\": \"mycroft.system.active_skills\", \"position\": 1, \"items_number\": 2}"));
@@ -286,9 +286,9 @@ void ServerTest::testActiveSkills()
     skillRemovedSpy.wait();
 
     QCOMPARE(m_view->activeSkills()->rowCount(), 3);
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(0,0)), QStringLiteral("mycroft.weather"));
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(1,0)), QStringLiteral("aiix.food-wizard"));
-    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(2,0)), QStringLiteral("mycroft.wiki"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(0,0), ActiveSkillsModel::SkillId), QStringLiteral("mycroft.weather"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(1,0), ActiveSkillsModel::SkillId), QStringLiteral("aiix.food-wizard"));
+    QCOMPARE(m_view->activeSkills()->data(m_view->activeSkills()->index(2,0), ActiveSkillsModel::SkillId), QStringLiteral("mycroft.wiki"));
 }
 
 void ServerTest::testSessionData()
@@ -525,7 +525,7 @@ void ServerTest::testEventsFromServer()
     QVERIFY(delegate);
     QCOMPARE(delegate->skillId(), QStringLiteral("mycroft.weather"));
 
-    QSignalSpy eventSpy(delegate, &AbstractDelegate::event);
+    QSignalSpy eventSpy(delegate, &AbstractDelegate::guiEvent);
 
     //An event of the weather skill
     m_guiWebSocket->sendTextMessage(QStringLiteral("{\"type\": \"mycroft.events.triggered\", \"namespace\": \"mycroft.weather\", \"event_name\": \"show_alert\", \"data\": {\"alert_name\": \"blizzard\", \"condition\": \"severe\"}}"));
@@ -565,7 +565,7 @@ void ServerTest::testEventsFromClient()
     QSignalSpy eventSpy(m_guiWebSocket, &QWebSocket::textMessageReceived);
 
     //skill own event
-    delegate->triggerEvent(QStringLiteral("mycroft.weather.refresh_forecast"), QVariantMap({{QStringLiteral("when"), QStringLiteral("Monday")}}));
+    delegate->triggerGuiEvent(QStringLiteral("mycroft.weather.refresh_forecast"), QVariantMap({{QStringLiteral("when"), QStringLiteral("Monday")}}));
     eventSpy.wait();
 
     QJsonDocument doc = QJsonDocument::fromJson(eventSpy.first().first().toString().toUtf8());
@@ -576,7 +576,7 @@ void ServerTest::testEventsFromClient()
     QCOMPARE(doc[QStringLiteral("parameters")][QStringLiteral("when")], QStringLiteral("Monday"));
 
     //system event
-    delegate->triggerEvent(QStringLiteral("system.next"), QVariantMap());
+    delegate->triggerGuiEvent(QStringLiteral("system.next"), QVariantMap());
     eventSpy.wait();
 
     doc = QJsonDocument::fromJson(eventSpy[1].first().toString().toUtf8());

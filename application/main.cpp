@@ -29,6 +29,7 @@
 #include <QGuiApplication>
 #else
 #include <QApplication>
+#include <KDBusService>
 #endif
 
 #include "speechintent.h"
@@ -49,10 +50,11 @@ int main(int argc, char *argv[])
     auto heightOption = QCommandLineOption(QStringLiteral("height"), QStringLiteral("Height of the screen"), QStringLiteral("height"));
     auto hideTextInputOption = QCommandLineOption(QStringLiteral("hideTextInput"), QStringLiteral("Hide the input box"));
     auto dpiOption = QCommandLineOption(QStringLiteral("dpi"), QStringLiteral("dpi"), QStringLiteral("dpi"));
+    auto skillOption = QCommandLineOption(QStringLiteral("skill"), QStringLiteral("Single skill to load"), QStringLiteral("skill"));
     auto maximizeOption = QCommandLineOption(QStringLiteral("maximize"), QStringLiteral("When set, start maximized."));
     auto rotateScreen = QCommandLineOption(QStringLiteral("rotateScreen"), QStringLiteral("When set, rotate the screen 180 degrees."));
     auto helpOption = QCommandLineOption(QStringLiteral("help"), QStringLiteral("Show this help message"));
-    parser.addOptions({widthOption, heightOption, hideTextInputOption,
+    parser.addOptions({widthOption, heightOption, hideTextInputOption, skillOption,
                        dpiOption, maximizeOption,
                        rotateScreen, helpOption});
     parser.process(arguments);
@@ -66,6 +68,8 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 #endif
 
+    app.setApplicationName(QStringLiteral("mycroft.gui"));
+    app.setOrganizationDomain(QStringLiteral("kde.org"));
     app.setWindowIcon(QIcon::fromTheme(QStringLiteral("mycroft")));
 
     // NOTE: Have to manually implement a --help option because the parser.addHelpOption() would
@@ -90,6 +94,23 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty(QStringLiteral("deviceMaximized"), maximize);
     engine.rootContext()->setContextProperty(QStringLiteral("hideTextInput"), parser.isSet(hideTextInputOption));
     engine.rootContext()->setContextProperty(QStringLiteral("globalScreenRotation"), parser.isSet(rotateScreen) ? 180 : 0);
+
+    QString singleSkill = parser.value(skillOption);
+    if (singleSkill.endsWith(QStringLiteral(".home"))) {
+        singleSkill = singleSkill.left(singleSkill.indexOf(QStringLiteral(".home")));
+        engine.rootContext()->setContextProperty(QStringLiteral("singleSkill"), singleSkill);
+        engine.rootContext()->setContextProperty(QStringLiteral("singleSkillHome"), parser.value(skillOption));
+    } else {
+        engine.rootContext()->setContextProperty(QStringLiteral("singleSkill"), singleSkill);
+        engine.rootContext()->setContextProperty(QStringLiteral("singleSkillHome"), QString());
+    }
+
+#ifndef Q_OS_ANDROID
+    if (parser.isSet(skillOption)) {
+        app.setApplicationName(QStringLiteral("mycroft.gui.") + singleSkill);
+        KDBusService service(KDBusService::Unique);
+    }
+#endif
 
     AppSettings *appSettings = new AppSettings(&view);
     engine.rootContext()->setContextProperty(QStringLiteral("applicationSettings"), appSettings);

@@ -103,6 +103,11 @@ AbstractSkillView::AbstractSkillView(QQuickItem *parent)
             engine->clearComponentCache();
         }
     });
+
+    connect(m_controller, &MycroftController::utteranceManagedBySkill, this,
+        [this](const QString &skillId) {
+            m_activeSkillsModel->checkGuiActivation(skillId);
+        });
 }
 
 AbstractSkillView::~AbstractSkillView()
@@ -211,7 +216,6 @@ ActiveSkillsModel *AbstractSkillView::activeSkills() const
 {
     return m_activeSkillsModel;
 }
-
 
 SessionDataMap *AbstractSkillView::sessionDataForSkill(const QString &skillId)
 {
@@ -322,6 +326,9 @@ void AbstractSkillView::onGuiSocketMessageReceived(const QString &message)
 
         //we already checked, assume *map is valid
         SessionDataMap *map = sessionDataForSkill(skillId);
+        if (!map) {
+            return;
+        }
         QVariantMap::const_iterator i;
         for (i = data.constBegin(); i != data.constEnd(); ++i) {
             //insert it as a model

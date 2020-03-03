@@ -18,6 +18,7 @@
 #pragma once
 
 #include <QAbstractListModel>
+#include <QSortFilterProxyModel>
 
 class AbstractDelegate;
 class DelegatesModel;
@@ -25,6 +26,9 @@ class DelegatesModel;
 class ActiveSkillsModel : public QAbstractListModel
 {
     Q_OBJECT
+    Q_PROPERTY(int activeIndex READ activeIndex NOTIFY activeIndexChanged)
+    Q_PROPERTY(QStringList blackList READ blackList WRITE setBlackList NOTIFY blackListChanged)
+    Q_PROPERTY(QStringList whiteList READ whiteList WRITE setWhiteList NOTIFY whiteListChanged)
 
 public:
     enum Roles {
@@ -34,6 +38,17 @@ public:
 
     explicit ActiveSkillsModel(QObject *parent = nullptr);
     virtual ~ActiveSkillsModel();
+
+    int activeIndex() const;
+
+    QStringList blackList() const;
+    void setBlackList(const QStringList &list);
+
+    QStringList whiteList() const;
+    void setWhiteList(const QStringList &list);
+
+    void checkGuiActivation(const QString &skillId);
+    bool skillAllowed(const QString skillId) const;
 
     /**
      * Insert new skills in the model, at a given position
@@ -45,8 +60,10 @@ public:
      */
     QModelIndex skillIndex(const QString &skillId);
 
+    QStringList activeSkills() const;
+
     DelegatesModel *delegatesModelForSkill(const QString &skillId);
-    QList<DelegatesModel *> delegatesModels() const;
+    QHash<QString, DelegatesModel*> delegatesModels() const;
 
 //REIMPLEMENTED
     bool moveRows(const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild) override;
@@ -55,8 +72,19 @@ public:
     QVariant data(const QModelIndex &index, int role = SkillId) const override;
     QHash<int, QByteArray> roleNames() const override;
 
+Q_SIGNALS:
+    void activeIndexChanged();
+    void blackListChanged();
+    void whiteListChanged();
+    void skillActivated(const QString &skillId);
+    void blacklistedSkillActivated(const QString &skillId);
+
 private:
+    void syncActiveIndex();
+    int m_activeIndex = -1;
     QList<QString> m_skills;
+    QList<QString> m_blackList;
+    QList<QString> m_whiteList;
     //TODO
     QHash<QString, DelegatesModel*> m_delegatesModels;
 };

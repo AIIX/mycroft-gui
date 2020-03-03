@@ -52,6 +52,11 @@ Mycroft.AbstractSkillView {
         }
     }
 
+    Connections {
+        target: root.activeSkills
+        onSkillActivated: root.open = true;
+    }
+
     SequentialAnimation {
         id: openAnimation
         ScriptAction {
@@ -69,7 +74,7 @@ Mycroft.AbstractSkillView {
                 easing.type: Easing.InOutQuad
             }
             YAnimator {
-                target: itemsParent
+                target: delegatesContainer
                 from: root.height / 4
                 to: root.topPadding
                 duration: Kirigami.Units.longDuration
@@ -89,7 +94,7 @@ Mycroft.AbstractSkillView {
                 easing.type: Easing.InOutQuad
             }
             YAnimator {
-                target: itemsParent
+                target: delegatesContainer
                 from: root.topPadding
                 to: root.height / 4
                 duration: Kirigami.Units.longDuration
@@ -129,7 +134,7 @@ Mycroft.AbstractSkillView {
 
             delegate: Item {
                 id: delegate
-                readonly property bool current: index == 0
+                readonly property bool current: index == activeSkills.activeIndex
                 property alias view: delegatesView
 
                 width: parent.width
@@ -141,7 +146,7 @@ Mycroft.AbstractSkillView {
                 z: current ? 1 : 0
 
                 onCurrentChanged: {
-                    if (current) {
+                    if (current && delegatesView.count > 0) {
                         activeSkillsRepeater.currentDelegate = delegate;
                         root.open = true;
                         enterAnim.restart();
@@ -173,15 +178,30 @@ Mycroft.AbstractSkillView {
                     separatorVisible: false
                     anchors.fill: parent
 
+                    onCountChanged: {
+                        if (delegate.current && delegatesView.count > 0) {
+                            activeSkillsRepeater.currentDelegate = delegate;
+                            if (root.open === false) {
+                                root.open = true;
+                                enterAnim.restart();
+                            }
+                        }
+
+                        if (count > 0 && currentIndex < 0) {
+                            currentIndex = 0;
+                        }
+                    }
                     onCurrentIndexChanged: {
                         delegates.currentIndex = currentIndex
                     }
 
                     Keys.onLeftPressed: {
                         delegatesView.currentIndex--
+                        delegatesView.currentItem.contentItem.forceActiveFocus()
                     }
                     Keys.onRightPressed: {
                         delegatesView.currentIndex++
+                        delegatesView.currentItem.contentItem.forceActiveFocus()
                     }
 
                     Connections {
@@ -193,6 +213,7 @@ Mycroft.AbstractSkillView {
 
                     Repeater {
                         model: delegates
+
                         delegate: Controls.Control {
                             id: delegate
 
