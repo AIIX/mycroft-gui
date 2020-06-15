@@ -109,7 +109,7 @@ Kirigami.ScrollablePage {
                         Image {
                             id: innerskImg
                             source: modelData.imgSrc;
-                            fillMode: PreserveAspectFit
+                            fillMode: Image.PreserveAspectFit
                             Layout.preferredWidth: innerskImg.width
                             Layout.preferredHeight: innerskImg.height
                             width: Kirigami.Units.gridUnit * 2
