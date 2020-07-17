@@ -22,13 +22,14 @@ import QtQuick.Controls 2.2 as Controls
 import org.kde.kirigami 2.4 as Kirigami
 import Mycroft 1.0 as Mycroft
 
-Kirigami.Page {
+Kirigami.ScrollablePage {
     title: "Settings"
     objectName: "Settings"
     
-    Column {
+    ColumnLayout {
         id: settingsLayout
-        anchors.fill: parent
+        width: parent.width
+        implicitHeight: childrenRect.height
         spacing: Kirigami.Units.largeSpacing
         
         Kirigami.Heading {
@@ -36,33 +37,31 @@ Kirigami.Page {
             level: 2
             font.bold: true
             color: Kirigami.Theme.textColor;
-            width: parent.width
+            Layout.fillWidth: true
             text: "Websocket Address"
         }
         
         Controls.Label {
             id: exampleLabel
             text: "Example: <tt>ws://192.168.1.1</tt>"
-            width: parent.width
+            Layout.fillWidth: true
         }
-        
-        Rectangle {
-            Kirigami.Theme.colorSet: Kirigami.Theme.Button
-            color: Kirigami.Theme.backgroundColor
-            width: parent.width
-            height: Kirigami.Units.gridUnit * 3
-            radius: 5
+                
+        Controls.Control{ 
+            Layout.fillWidth: true
+            Layout.preferredHeight: Kirigami.Units.gridUnit * 3
+            leftPadding: Kirigami.Units.largeSpacing
+            rightPadding: Kirigami.Units.largeSpacing
             
-            Controls.TextField {
+            background: Rectangle {
+                Kirigami.Theme.colorSet: Kirigami.Theme.Button
+                color: Kirigami.Theme.backgroundColor
+                radius: 5
+            }
+            
+            contentItem: Controls.TextField {
                 id: webSocketAddressField
-                anchors.top: parent.top
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.topMargin: Kirigami.Units.largeSpacing
-                anchors.leftMargin: Kirigami.Units.largeSpacing
-                anchors.rightMargin: Kirigami.Units.largeSpacing
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: -Kirigami.Units.smallSpacing
+                
                 Component.onCompleted:{
                     webSocketAddressField.text = Mycroft.GlobalSettings.webSocketAddress
                 }
@@ -70,8 +69,8 @@ Kirigami.Page {
         }
 
         RowLayout {
-           width: parent.width
-           height: Kirigami.Units.gridUnit * 4
+           Layout.fillWidth: true
+           Layout.preferredHeight: Kirigami.Units.gridUnit * 4
                        
            Controls.Button {
                 id: applySettings
@@ -102,28 +101,28 @@ Kirigami.Page {
         }
         
         Item {
-            height: Kirigami.Units.largeSpacing * 2
+            Layout.preferredHeight: Kirigami.Units.largeSpacing * 2
         }
         
         Kirigami.Heading {
             level: 2
             text: "About Application"
             font.bold: true
-            width: parent.width
+            Layout.fillWidth: true
             color: Kirigami.Theme.textColor
         }
 
         Controls.Label {
             id: mycroftAndroidAppVersionLabel
             text: "Application Version: 0.80"
-            width: parent.width
+            Layout.fillWidth: true
             color: Kirigami.Theme.textColor;
         }
         
         Controls.Label {
             id: mycroftGuiVersionLabel
             text: "GUI Version: 1.0"
-            width: parent.width
+            Layout.fillWidth: true
             color: Kirigami.Theme.textColor;
         }
     }
