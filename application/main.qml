@@ -24,6 +24,7 @@ import org.kde.kirigami 2.4 as Kirigami
 import QtQuick.Window 2.2
 import Mycroft 1.0 as Mycroft
 import org.kde.private.mycroftgui 1.0 as MycroftGui
+import QtQuick.Controls.Material 2.0
 
 Kirigami.ApplicationWindow {
     id: root
@@ -90,6 +91,8 @@ Kirigami.ApplicationWindow {
     globalDrawer: Kirigami.GlobalDrawer {
         bannerImageSource: "banner.png"
         handleVisible: !hideTextInput
+        Kirigami.Theme.inherit: false
+        Kirigami.Theme.colorSet: applicationSettings.darkMode ? Kirigami.Theme.Complementary : Kirigami.Theme.View
 
         actions: [
             Kirigami.Action {
@@ -136,6 +139,7 @@ Kirigami.ApplicationWindow {
         }
         Switch {
             id: nightSwitch
+            visible: !Kirigami.Settings.isMobile
             text: "Dark Mode"
             checked: applicationSettings.darkMode
             onCheckedChanged: applicationSettings.darkMode = checked
@@ -187,7 +191,7 @@ Kirigami.ApplicationWindow {
                     }
                 }
             }
-            
+
             Popup {
                 id: audioRecorder
                 width: 300
@@ -195,11 +199,11 @@ Kirigami.ApplicationWindow {
                 closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
                 x: (root.width - width) / 2
                 y: (root.height - height) / 2
-                
+
                 RemoteStt {
                     id: remoteSttInstance
                 }
-                
+
                 onOpenedChanged: {
                     if(audioRecorder.opened){
                         remoteSttInstance.record = true;
@@ -305,9 +309,9 @@ Kirigami.ApplicationWindow {
                     text: "Speak" // TODO generic microphone icon
                     onClicked:  {
                         if(applicationSettings.usesRemoteSTT){
-                            audioRecorder.open()  
-                        } else { 
-                            speechIntent.start() 
+                            audioRecorder.open()
+                        } else {
+                            speechIntent.start()
                         }
                     }
                     visible: speechIntent.supported || applicationSettings.usesRemoteSTT
@@ -344,5 +348,3 @@ Kirigami.ApplicationWindow {
         }
     }
 }
-
-
