@@ -27,7 +27,9 @@ The following guide will provide a set of instructions to get you started with i
 
 ### General Setup Instructions
 
-The Installation script supports installation on KDE Neon, K/Ubuntu 20.04 & Manjaro Linux
+The interactive Installation script supports installation on KDE Neon, K/Ubuntu 20.04 & Manjaro Linux, It also supports installation and building on other distributions and platforms but system dependencies will be have to installed manually as mentioned in the Installation Script.
+
+
 
 1) Fetch Repository and Run Installation Script 
    
@@ -174,7 +176,5 @@ Having trouble or facing issues with Mycroft GUI ? You can use the below guide t
    - Run `sudo su mycroft`
    
    - Run `mycroft-enclosure-client` This will start the client and show Debug() messages on the console.
-     
-      
 
 ## 
