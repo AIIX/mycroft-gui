@@ -255,6 +255,11 @@ void MycroftController::onMainSocketMessageReceived(const QString &message)
         emit isListeningChanged();
         return;
     }
+    if (type == QLatin1String("recognizer_loop:record_begin") && !m_isListening) {
+        m_isListening = true;
+        emit isListeningChanged();
+        return;
+    }
     if (type == QLatin1String("recognizer_loop:record_end")) {
         m_isListening = false;
         emit isListeningChanged();
