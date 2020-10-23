@@ -71,7 +71,7 @@ Kirigami.ApplicationWindow {
             }
         }
         
-        onSkillTimeoutRecieved: {
+        onSkillTimeoutReceived: {
             if(mainView.currentItem.contentItem.skillId() == skillidleid) {
                 root.close()
             }

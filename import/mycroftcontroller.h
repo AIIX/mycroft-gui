@@ -93,7 +93,7 @@ Q_SIGNALS:
     void fallbackTextRecieved(const QString &skill, const QVariantMap &data);
 
     void utteranceManagedBySkill(const QString &skill);
-    void skillTimeoutRecieved(const QString &skillidleid);
+    void skillTimeoutReceived(const QString &skillidleid);
 
 public Q_SLOTS:
     void start();

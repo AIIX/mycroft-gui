@@ -311,7 +311,7 @@ void MycroftController::onMainSocketMessageReceived(const QString &message)
     
     if (type == QLatin1String("screen.close.idle.event")) {
         QString skill_idle_event_id = doc[QStringLiteral("data")][QStringLiteral("skill_idle_event_id")].toString();
-        emit skillTimeoutRecieved(skill_idle_event_id);
+        emit skillTimeoutReceived(skill_idle_event_id);
     }
 
     // Check if it's an utterance recognized as an intent
