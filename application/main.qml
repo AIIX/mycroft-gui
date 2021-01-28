@@ -160,19 +160,7 @@ Kirigami.ApplicationWindow {
                 }
             }
         ]
-        Switch {
-            id: remoteSTTSwitch
-            text: "Remote STT"
-            checked: applicationSettings.usesRemoteSTT
-            onCheckedChanged: applicationSettings.usesRemoteSTT = checked
-            visible: Mycroft.GlobalSettings.displayRemoteConfig
-        }
-        Switch {
-            text: "Remote TTS"
-            checked: Mycroft.GlobalSettings.usesRemoteTTS
-            onCheckedChanged: Mycroft.GlobalSettings.usesRemoteTTS = checked
-            visible: Mycroft.GlobalSettings.displayRemoteConfig
-        }
+        
         Switch {
             id: nightSwitch
             visible: !Kirigami.Settings.isMobile
@@ -225,8 +213,8 @@ Kirigami.ApplicationWindow {
 
             Popup {
                 id: audioRecorder
-                width: 300
-                height: 125
+                width: root.width / 2
+                height: root.height / 2
                 closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
                 x: (root.width - width) / 2
                 y: (root.height - height) / 2
@@ -250,6 +238,7 @@ Kirigami.ApplicationWindow {
                 Kirigami.Theme.colorSet: nightSwitch.checked ? Kirigami.Theme.Complementary : Kirigami.Theme.View
                 anchors.fill: parent
             }
+
             Button {
                 anchors.centerIn: parent
                 text: "start"
@@ -267,6 +256,7 @@ Kirigami.ApplicationWindow {
                 }
                 z: 999
             }
+
             Kirigami.Heading {
                 id: inputQuery
                 Kirigami.Theme.colorSet: mainView.Kirigami.Theme.colorSet
@@ -317,6 +307,27 @@ Kirigami.ApplicationWindow {
                     Layout.fillHeight: true
                     Layout.preferredWidth: height
                 }
+                
+                ToolButton {
+                    id: backButton
+                    Kirigami.Theme.colorSet: Kirigami.Theme.Button
+                    Layout.preferredWidth: handleAnchor.width
+                    Layout.fillHeight: true
+                    Layout.rightMargin: Kirigami.Units.smallSpacing
+                    enabled: !isAndroid && Kirigami.Settings.isMobile ? 1 : 0
+                    
+                    contentItem: Kirigami.Icon {
+                        anchors.centerIn: parent
+                        source: "arrow-left"
+                    }
+                    
+                    onClicked:  {
+                        mainView.currentItem.backRequested()
+                    }
+                    visible: !isAndroid && Kirigami.Settings.isMobile ? 1 : 0
+                }
+                
+                
                 TextField {
                     id: qinput
                     Layout.fillWidth: true
