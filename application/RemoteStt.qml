@@ -58,6 +58,7 @@ Item {
         Kirigami.Heading {
             id: lbl1
             text: "Listening"
+            Kirigami.Theme.colorSet: nightSwitch.checked ? Kirigami.Theme.Complementary : Kirigami.Theme.View
             level: 2
             font.bold: true
             Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
@@ -96,6 +97,9 @@ Item {
             Layout.topMargin: Kirigami.Units.smallSpacing
             Layout.bottomMargin: Kirigami.Units.smallSpacing
             Layout.preferredHeight: paintedHeight
+            Kirigami.Theme.colorSet: nightSwitch.checked ? Kirigami.Theme.Complementary : Kirigami.Theme.View
+            wrapMode: Text.WordWrap
+            maximumLineCount: 2
             level: 3
             horizontalAlignment: Text.AlignHCenter
             text: "Say something to Mycroft"
@@ -144,6 +148,7 @@ Item {
         }
 
         Rectangle {
+            Kirigami.Theme.colorSet: nightSwitch.checked ? Kirigami.Theme.Complementary : Kirigami.Theme.View
             color: Kirigami.Theme.hoverColor
             Layout.fillWidth: true
             Layout.topMargin: Kirigami.Units.smallSpacing
