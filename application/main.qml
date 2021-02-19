@@ -334,7 +334,9 @@ Kirigami.ApplicationWindow {
                     icon.color: "white"
                     
                     onClicked:  {
-                        mainView.currentItem.backRequested()
+                        console.log("From Main QML:")
+                        console.log(mainView.currentItem.contentItem.skillId())
+                        mainView.currentItem.backRequested(mainView.currentItem.contentItem.skillId())   
                     }
                     visible: !isAndroid && Kirigami.Settings.isMobile ? 1 : 0
                 }
