@@ -189,9 +189,11 @@ void AbstractSkillView::deleteProperty(const QString &skillId, const QString &pr
     m_guiWebSocket->sendTextMessage(QString::fromUtf8(doc.toJson()));
 }
 
-void AbstractSkillView::showHomeScreen()
+void AbstractSkillView::showHomeScreen(const QString &skillId, const QString &skillPage)
 {
-    m_controller->sendRequest(QStringLiteral("mycroft.device.show.idle"), {});
+    m_controller->sendRequest(QStringLiteral("mycroft.device.display.timeout"),
+                              QVariantMap({{QStringLiteral("skillId"), skillId},
+                                           {QStringLiteral("skillPage"), skillPage}}));
 }
 
 MycroftController::Status AbstractSkillView::status() const

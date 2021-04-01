@@ -80,7 +80,7 @@ public:
     void writeProperties(const QString &skillId, const QVariantMap &data);
     void deleteProperty(const QString &skillId, const QString &property);
 
-    Q_INVOKABLE void showHomeScreen();
+    Q_INVOKABLE void showHomeScreen(const QString &skillId, const QString &skillPage);
 
 Q_SIGNALS:
     /**

@@ -136,7 +136,7 @@ Mycroft.AbstractSkillView {
                 running = false;
             }
         }
-        onTriggered: root.showHomeScreen();
+        onTriggered: root.showHomeScreen(currentItem.contentItem.skillId(), currentItem.contentItem.qmlUrl());
     }
 
     Item {

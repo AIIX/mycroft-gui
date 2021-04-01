@@ -172,7 +172,6 @@ public:
      * @internal Url of the qml file that generated this instance
      */
     void setQmlUrl(const QUrl &url);
-    QUrl qmlUrl() const;
 
     /**
      * @internal skill id this delegate belongs to
@@ -186,6 +185,7 @@ public Q_SLOTS:
      */
     void triggerGuiEvent(const QString &eventName, const QVariantMap &parameters);
     QString skillId() const;
+    QUrl qmlUrl() const;
 
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
