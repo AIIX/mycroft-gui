@@ -80,7 +80,7 @@ MycroftController::MycroftController(QObject *parent)
 
     m_reconnectTimer.setInterval(1000);
     connect(&m_reconnectTimer, &QTimer::timeout, this, [this]() {
-        QString socket = m_appSettingObj->webSocketAddress() + QStringLiteral(":8181/core");
+        QString socket = m_appSettingObj->webSocketAddress() + QStringLiteral(":5678?accessKey=R1VJOmFzZGZnaGprbDEyMzQ1Njc=");
         m_mainWebSocket.open(QUrl(socket));
     });
 
@@ -118,7 +118,7 @@ MycroftController::MycroftController(QObject *parent)
 void MycroftController::start()
 {
     //auto appSettingObj = new GlobalSettings;
-    QString socket = m_appSettingObj->webSocketAddress() + QStringLiteral(":8181/core");
+    QString socket = m_appSettingObj->webSocketAddress() + QStringLiteral(":5678?accessKey=R1VJOmFzZGZnaGprbDEyMzQ1Njc=");
     m_mainWebSocket.open(QUrl(socket));
     connect(&m_mainWebSocket, QOverload<QAbstractSocket::SocketError>::of(&QWebSocket::error),
             this, [this] (const QAbstractSocket::SocketError &error) {
