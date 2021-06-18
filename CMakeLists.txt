@@ -92,6 +92,9 @@ install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/mycroft-gui-core-loader DESTINATION
 configure_file(data/mycroft-gui-core-stop.in ${CMAKE_CURRENT_BINARY_DIR}/mycroft-gui-core-stop)
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/mycroft-gui-core-stop DESTINATION ${KDE_INSTALL_BINDIR})
 
+configure_file(data/mycroft-gui-ptt-loader.in ${CMAKE_CURRENT_BINARY_DIR}/mycroft-gui-ptt-loader)
+install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/mycroft-gui-ptt-loader DESTINATION ${KDE_INSTALL_BINDIR})
+
 if (BUILD_TESTING AND NOT CMAKE_SYSTEM_NAME STREQUAL "Android")
     add_subdirectory(autotests)
 endif()

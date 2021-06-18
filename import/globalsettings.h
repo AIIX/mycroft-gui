@@ -34,7 +34,8 @@ class GlobalSettings : public QObject
     Q_PROPERTY(bool autoConnect READ autoConnect WRITE setAutoConnect NOTIFY autoConnectChanged)
     Q_PROPERTY(bool usesRemoteTTS READ usesRemoteTTS WRITE setUsesRemoteTTS NOTIFY usesRemoteTTSChanged)
     Q_PROPERTY(bool displayRemoteConfig READ displayRemoteConfig WRITE setDisplayRemoteConfig NOTIFY displayRemoteConfigChanged)
-    
+    Q_PROPERTY(bool usePTTClient READ usePTTClient WRITE setUsePTTClient NOTIFY usePTTClient)
+
 public:
     explicit GlobalSettings(QObject *parent=0);
 #ifndef Q_OS_ANDROID
@@ -49,12 +50,15 @@ public:
     void setUsesRemoteTTS(bool usesRemoteTTS);
     bool displayRemoteConfig() const;
     void setDisplayRemoteConfig(bool displayRemoteConfig);
+    bool usePTTClient() const;
+    void setUsePTTClient(bool usePttClient);
 
 Q_SIGNALS:
     void webSocketChanged();
     void autoConnectChanged();
     void usesRemoteTTSChanged();
     void displayRemoteConfigChanged();
+    void usePTTClientChanged();
 
 private:
     QSettings m_settings;

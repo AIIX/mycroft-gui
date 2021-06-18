@@ -102,6 +102,7 @@ public Q_SLOTS:
     void sendRequest(const QString &type, const QVariantMap &data);
     void sendBinary(const QString &type, const QJsonObject &data);
     void sendText(const QString &message);
+    void startPTTClient();
 
 private:
     explicit MycroftController(QObject *parent = nullptr);

@@ -73,3 +73,18 @@ void GlobalSettings::setDisplayRemoteConfig(bool displayRemoteConfig)
     m_settings.setValue(QStringLiteral("displayRemoteConfig"), displayRemoteConfig);
     emit displayRemoteConfigChanged();
 }
+
+bool GlobalSettings::usePTTClient() const
+{
+    return m_settings.value(QStringLiteral("usePTTClient"), false).toBool();
+}
+
+void GlobalSettings::setUsePTTClient(bool usePTTClient)
+{
+    if (GlobalSettings::usePTTClient() == usePTTClient) {
+        return;
+    }
+
+    m_settings.setValue(QStringLiteral("usePTTClient"), usePTTClient);
+    emit usePTTClientChanged();
+}

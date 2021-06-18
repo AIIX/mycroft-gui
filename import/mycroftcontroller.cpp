@@ -134,6 +134,9 @@ void MycroftController::start()
         if (!m_mycroftLaunched) {
             QProcess::startDetached(QStringLiteral("mycroft-gui-core-loader"), QStringList());
             m_mycroftLaunched = true;
+            if(m_appSettingObj->usePTTClient()){
+                QProcess::startDetached(QStringLiteral("mycroft-gui-ptt-loader"), QStringList());
+            }
         }
         m_reconnectTimer.start();
         emit socketStatusChanged();
@@ -160,6 +163,11 @@ void MycroftController::reconnect()
     m_mainWebSocket.close();
     m_reconnectTimer.start();
     emit socketStatusChanged();
+}
+
+void MycroftController::startPTTClient()
+{
+    QProcess::startDetached(QStringLiteral("mycroft-gui-ptt-loader"), QStringList());
 }
 
 void MycroftController::onMainSocketMessageReceived(const QString &message)
